@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ETF Screener Dashboard</title>
+    <meta
+      name="description"
+      content="Filter ETFs by sector, issuer, expense ratio, performance, yield, assets, and launch year with direct links to ETF websites."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="topbar" aria-label="Primary navigation">
+        <a class="brand" href="#top" aria-label="ETF Screener home">
+          <span class="brand-mark">ETF</span>
+          <span>Screener</span>
+        </a>
+        <a class="nav-link" href="#results">Results</a>
+      </nav>
+
+      <section class="hero-grid" id="top">
+        <div>
+          <p class="eyebrow">One interface for ETF discovery</p>
+          <h1>Filter ETFs and jump straight to dedicated ETF websites.</h1>
+          <p class="hero-copy">
+            Compare sectors, expenses, performance, yield, and asset size in a focused dashboard, then open official fund pages or issuer search tools for deeper due diligence.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#results">Start filtering</a>
+            <button class="button ghost" id="resetFiltersHero" type="button">Reset filters</button>
+          </div>
+        </div>
+        <aside class="strategy-card" aria-label="Interface structure">
+          <p>Your Web Interface</p>
+          <ul>
+            <li><span>ETF Filter Dashboard</span></li>
+            <li><span>Filter Panel</span> sector, expense ratio, performance</li>
+            <li><span>Results Grid</span> sortable cards</li>
+            <li><span>Links to ETF Websites</span> official pages + searches</li>
+          </ul>
+        </aside>
+      </section>
+    </header>
+
+    <main class="app-shell" id="results">
+      <aside class="filters" aria-labelledby="filters-heading">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Filter panel</p>
+            <h2 id="filters-heading">Refine ETF universe</h2>
+          </div>
+          <button class="text-button" id="resetFilters" type="button">Clear all</button>
+        </div>
+
+        <label>
+          Search ETF, ticker, or issuer
+          <input id="searchInput" type="search" placeholder="e.g., VOO, clean energy" autocomplete="off" />
+        </label>
+
+        <label>
+          Sector / theme
+          <select id="sectorFilter">
+            <option value="all">All sectors</option>
+          </select>
+        </label>
+
+        <label>
+          Issuer
+          <select id="issuerFilter">
+            <option value="all">All issuers</option>
+          </select>
+        </label>
+
+        <div class="range-group">
+          <label for="expenseFilter">Max expense ratio</label>
+          <div class="range-value"><span id="expenseValue">0.95%</span></div>
+          <input id="expenseFilter" type="range" min="0.03" max="0.95" value="0.95" step="0.01" />
+        </div>
+
+        <div class="range-group">
+          <label for="performanceFilter">Min 1-year return</label>
+          <div class="range-value"><span id="performanceValue">-20%</span></div>
+          <input id="performanceFilter" type="range" min="-20" max="45" value="-20" step="1" />
+        </div>
+
+        <div class="range-group">
+          <label for="aumFilter">Min assets under management</label>
+          <div class="range-value"><span id="aumValue">$0B</span></div>
+          <input id="aumFilter" type="range" min="0" max="500" value="0" step="5" />
+        </div>
+
+        <fieldset>
+          <legend>Focus</legend>
+          <label class="checkbox-row">
+            <input id="dividendFilter" type="checkbox" />
+            Dividend yield above 2%
+          </label>
+          <label class="checkbox-row">
+            <input id="lowCostFilter" type="checkbox" />
+            Expense ratio 0.10% or less
+          </label>
+        </fieldset>
+
+        <div class="ask-panel" aria-labelledby="ask-heading">
+          <div>
+            <p class="eyebrow">Ask function</p>
+            <h3 id="ask-heading">Screen by request</h3>
+            <p>Describe what you want, and the screener will apply matching local filters. Mention “latest” or “internet” to be asked before opening web research.</p>
+          </div>
+          <label>
+            ETF screening request
+            <textarea id="askInput" rows="4" placeholder="e.g., Find low-cost Vanguard dividend ETFs with yield above 2%"></textarea>
+          </label>
+          <div class="ask-actions">
+            <button class="button small primary-action" id="askButton" type="button">Ask screener</button>
+            <button class="button small secondary-action" id="internetButton" type="button">Connect to internet</button>
+          </div>
+          <p class="ask-status" id="askStatus">Ask a question to auto-apply filters.</p>
+        </div>
+      </aside>
+
+      <section class="results-panel" aria-live="polite">
+        <div class="results-toolbar">
+          <div>
+            <p class="eyebrow">Results grid</p>
+            <h2><span id="resultCount">0</span> ETFs match your criteria</h2>
+          </div>
+          <label class="sort-control">
+            Sort by
+            <select id="sortSelect">
+              <option value="aum-desc">Largest AUM</option>
+              <option value="return-desc">Best 1Y return</option>
+              <option value="expense-asc">Lowest expense</option>
+              <option value="yield-desc">Highest yield</option>
+              <option value="ticker-asc">Ticker A-Z</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="quick-links" aria-label="ETF website shortcuts">
+          <a href="https://www.ishares.com/us/search#q=" target="_blank" rel="noreferrer">iShares search</a>
+          <a href="https://investor.vanguard.com/search?query=" target="_blank" rel="noreferrer">Vanguard search</a>
+          <a href="https://www.ssga.com/us/en/intermediary/etfs/fund-finder" target="_blank" rel="noreferrer">SPDR fund finder</a>
+          <a href="https://www.invesco.com/us/en/insights/etf.html" target="_blank" rel="noreferrer">Invesco ETFs</a>
+        </div>
+
+        <div class="cards" id="etfCards"></div>
+        <div class="empty-state" id="emptyState" hidden>
+          <h3>No ETFs found</h3>
+          <p>Try widening your expense, performance, AUM, sector, or issuer filters.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Sample ETF data is for interface demonstration only and is not investment advice. Verify current fund details on each issuer website before making decisions.
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
