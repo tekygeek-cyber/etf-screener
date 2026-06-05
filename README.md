@@ -61,3 +61,5 @@ node --test test/smoke.test.js
 ## Data note
 
 The included ETF data is sample interface data for demonstration only. Confirm current expense ratios, returns, yields, AUM, and risk information on each ETF issuer website before making investment decisions.
+
+<!-- deployment retry -->
